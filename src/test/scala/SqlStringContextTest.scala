@@ -1,7 +1,7 @@
 import utest._
 import groodi._
 
-object GroodiTest extends TestSuite{
+object SqlStringContextTest extends TestSuite {
 
 //  implicit val connection = new Connection {override def commit(): Unit = ???
 //
@@ -693,9 +693,15 @@ object GroodiTest extends TestSuite{
 //  }
 
   val tests = Tests {
-    "should run it" - {
+    "should prepare statement right" - {
       val id = 0
       val statement = sql"select * from users where id = $id"
+      assert(
+        statement == PreparedStatement(
+          Seq("select * from users where id = ", ""),
+          Seq(SqlArgument.IntValue(0))
+        )
+      )
     }
   }
 }

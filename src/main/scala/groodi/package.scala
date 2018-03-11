@@ -31,7 +31,7 @@ package object groodi {
     def sqlImpl(args: c.Tree*): c.Tree = {
       val Apply(_, List(Apply(_, rawParts))) = c.prefix.tree
       val xs = args.map(x => q"implicitly[groodi.SqlEncoder[${x.tpe}]].apply($x)")
-      val parts = rawParts.map(s => Literal(Constant(s)))
+      val parts = rawParts.map { case Literal(Constant(s: String)) => s }
       q"""groodi.PreparedStatement(Seq(..$parts), Seq(..$xs))"""
     }
   }
